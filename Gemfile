@@ -46,7 +46,9 @@ gem 'markaby'
 gem 'nokogiri', '> 1.5.0'
 gem 'pandoc-ruby', '~> 2.0.2'
 gem 'rabl'
-gem 'rainbows', platforms: [:mri] # uses #fork
+if rack_version == '~> 2'
+  gem 'rainbows', platforms: [:mri] # uses #fork
+end
 gem 'rdiscount', platforms: [:ruby]
 gem 'rdoc'
 gem 'redcarpet', platforms: [:ruby]

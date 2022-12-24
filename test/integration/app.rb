@@ -1,7 +1,11 @@
 $stderr.puts "loading"
 require 'sinatra'
 
-require_relative 'rainbows' if RUBY_ENGINE == 'ruby'
+begin
+  require_relative 'rainbows' if RUBY_ENGINE == 'ruby'
+rescue LoadError => e
+  warn "Skipping rainbows (#{e.inspect})"
+end
 
 configure do
   set :foo, :bar
