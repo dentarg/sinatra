@@ -35,6 +35,7 @@ jobs:
     env:
       rack: ${{ matrix.rack }}
       puma: ${{ matrix.puma }}
+
     steps:
     - name: Install dependencies
       run: |
