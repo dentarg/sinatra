@@ -4,7 +4,7 @@ module IntegrationAsyncHelper
   def it(message, &block)
     base_port = 5100 + Process.pid % 100
 
-    %w(puma).each_with_index do |server_name, index|
+    [].each_with_index do |server_name, index|
       server = IntegrationHelper::BaseServer.new(server_name, base_port + index)
       next unless server.installed?
 
