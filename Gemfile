@@ -37,7 +37,6 @@ gem 'asciidoctor'
 gem 'builder'
 gem 'commonmarker', '~> 0.23.4', platforms: [:ruby]
 gem 'erubi'
-gem 'eventmachine'
 gem 'falcon', '~> 0.40', platforms: [:ruby]
 gem 'haml', '~> 6'
 gem 'kramdown'
@@ -46,9 +45,6 @@ gem 'markaby'
 gem 'nokogiri', '> 1.5.0'
 gem 'pandoc-ruby', '~> 2.0.2'
 gem 'rabl'
-if rack_version == '~> 2'
-  gem 'rainbows', platforms: [:mri] # uses #fork
-end
 gem 'rdiscount', platforms: [:ruby]
 gem 'rdoc'
 gem 'redcarpet', platforms: [:ruby]
