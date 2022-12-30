@@ -477,9 +477,8 @@ module Sinatra
             @back.call(self)
           rescue Exception => e
             @scheduler.schedule { raise e }
-          ensure
-            close
           end
+          close unless @keep_open
         end
       end
 
@@ -510,16 +509,7 @@ module Sinatra
     def stream(keep_open = false)
       scheduler = env['async.callback'] ? EventMachine : Stream
       current   = @params.dup
-      block = if scheduler == Stream && keep_open
-        proc do |out|
-          until out.closed?
-            with_params(current) { yield(out) }
-          end
-        end
-      else
-        proc { |out| with_params(current) { yield(out) } }
-      end
-      body Stream.new(scheduler, keep_open, &block)
+      body Stream.new(scheduler, keep_open) { |out| with_params(current) { yield(out) } }
     end
 
     # Specify response freshness policy for HTTP caches (Cache-Control header).
