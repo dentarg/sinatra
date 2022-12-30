@@ -1,11 +1,9 @@
 #!/usr/bin/env ruby -I ../lib -I lib
 # frozen_string_literal: true
 
-require_relative 'rainbows'
-
 require 'sinatra'
-set :server, :rainbows
-connections = []
+set :server, :puma
+connections = Set.new
 
 get '/' do
   halt erb(:login) unless params[:user]
@@ -16,11 +14,16 @@ get '/stream', provides: 'text/event-stream' do
   stream :keep_open do |out|
     connections << out
     out.callback { connections.delete(out) }
+    sleep 1
   end
 end
 
 post '/' do
-  connections.each { |out| out << "data: #{params[:msg]}\n\n" }
+  connections.each do |out|
+    out << "data: #{params[:msg]}\n\n"
+  rescue
+    out.close
+  end
   204 # response without entity body
 end
 

@@ -33,9 +33,17 @@ get '/mainonly' do
   end
 end
 
+# the "sleep 1" in async routes makes the async tests work with puma
+# more in https://github.com/sinatra/sinatra/pull/1853
+
 set :out, nil
 get '/async' do
-  stream(:keep_open) { |o| (settings.out = o) << "hi!" }
+  stream(:keep_open) do |out_stream|
+    (settings.out = out_stream) << "hi!"
+    sleep 1
+  rescue
+    out_stream.close
+  end
 end
 
 get '/send' do
@@ -64,7 +72,12 @@ end
 class Subclass < Sinatra::Base
   set :out, nil
   get '/subclass/async' do
-    stream(:keep_open) { |o| (settings.out = o) << "hi!" }
+    stream(:keep_open) do |out_stream|
+      (settings.out = out_stream) << "hi!"
+      sleep 1
+    rescue
+      out_stream.close
+    end
   end
 
   get '/subclass/send' do
