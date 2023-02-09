@@ -314,7 +314,7 @@ class RoutingTest < Minitest::Test
   it "handles params without a value" do
     mock_app {
       get '/' do
-        assert_nil params.fetch('foo')
+        assert_empty params.fetch('foo')
         "Given: #{params.keys.sort.join(',')}"
       end
     }
