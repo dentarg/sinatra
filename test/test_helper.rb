@@ -75,12 +75,14 @@ class Minitest::Test
   # Sets up a Sinatra::Base subclass defined with the block
   # given. Used in setup or individual spec methods to establish
   # the application.
-  def mock_app(base=Sinatra::Base, &block)
-    @app = Sinatra.new(base, &block)
+  def mock_app(base=Sinatra::Base, lint: true, &block)
+    app = Sinatra.new(base, &block)
+
+    @app = lint ? Rack::Lint.new(app) : app
   end
 
   def app
-    Rack::Lint.new(@app)
+    @app || mock_app
   end
 
   def body
